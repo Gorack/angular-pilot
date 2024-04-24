@@ -1,0 +1,20 @@
+<mat-card class="app-project-card" [ngClass]="{'app-project-card--inline': inline}">
+  <img mat-card-image [src]="'https://ui-avatars.com/api/?name='+ project?.name +'&background=random&size=680'" alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    <mat-card-title class="app-project-card__title">{{project?.name}}</mat-card-title>
+    <p *ngIf="project?.description">
+      {{project?.description}}
+    </p>
+
+    <div *ngIf="extended">
+      <hr *ngIf="project?.members?.length">
+      <p *ngFor="let member of project?.members" class="app-project-card__member">{{member.name}} <i>({{member.position}})</i></p>
+      <hr *ngIf="project?.links?.length">
+
+      <a *ngFor="let link of project?.links" [href]="link.url">{{link.name}}</a>
+    </div>
+  </mat-card-content>
+  <mat-card-actions *ngIf="showDetails">
+    <a mat-button [routerLink]="'/project/' + project?.id">Részletek</a>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,144 @@
+<h2>Projekt hozzáadása</h2>
+
+<mat-stepper linear #stepper>
+  <mat-step [stepControl]="firstStepForm">
+    <form class="app-project-create__form" [formGroup]="firstStepForm">
+      <ng-template matStepLabel>
+        Projekt adatai
+      </ng-template>
+      <mat-form-field>
+        <mat-label>Projekt neve</mat-label>
+        <input matInput placeholder="Név" formControlName="name">
+        <mat-error>
+          <app-form-error [control]="firstStepForm.controls['name']" />
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Leírás</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+        <mat-error>
+          <app-form-error [control]="firstStepForm.controls['description']" />
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-button matStepperNext>Tovább</button>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondStepForm">
+    <form class="app-project-create__form" [formGroup]="secondStepForm">
+      <ng-template matStepLabel>
+        Kollégák hozzáadása
+      </ng-template>
+
+      <div *ngIf="members.controls?.length" formArrayName="members">
+        <div *ngFor="let member of members.controls; let i = index; let isLast = last;" class="app-project-create__list">
+          <form
+            [formGroup]="member"
+            class="app-project-create__form"
+          >
+            <mat-form-field>
+              <mat-label>Kolléga neve</mat-label>
+              <input matInput placeholder="Név" formControlName="name">
+              <mat-error>
+                <app-form-error [control]="member.controls['name']" />
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Kolléga pozíciója</mat-label>
+              <input matInput placeholder="Pozíció" formControlName="position">
+              <mat-error>
+                <app-form-error [control]="member.controls['position']" />
+              </mat-error>
+            </mat-form-field>
+          </form>
+
+          <div class="app-project-create__actions">
+            <button *ngIf="isLast" mat-button (click)="addMember()">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-button (click)="removeMember(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!members.controls?.length" style="text-align: center">
+        <button mat-button (click)="addMember()">
+          <mat-icon>add</mat-icon>
+          <span>Kolléga hozzáadása</span>
+        </button>
+      </div>
+
+      <button mat-button matStepperNext>Tovább</button>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="thirdStepForm">
+    <form class="app-project-create__form" [formGroup]="thirdStepForm">
+      <ng-template matStepLabel>
+        Linkek hozzáadása
+      </ng-template>
+
+      <div *ngIf="links.controls?.length" formArrayName="links">
+        <div *ngFor="let link of links.controls; let i = index; let isLast = last;" class="app-project-create__list">
+          <form
+            [formGroup]="link"
+            class="app-project-create__form"
+          >
+            <mat-form-field>
+              <mat-label>Link neve</mat-label>
+              <input matInput placeholder="Név" formControlName="name">
+              <mat-error>
+                <app-form-error [control]="link.controls['name']" />
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Link URL</mat-label>
+              <input matInput placeholder="Url" formControlName="url">
+              <mat-error>
+                <app-form-error [control]="link.controls['url']" />
+              </mat-error>
+            </mat-form-field>
+          </form>
+
+          <div class="app-project-create__actions">
+            <button *ngIf="isLast" mat-button (click)="addLink()">
+              <mat-icon>add</mat-icon>
+            </button>
+            <button mat-button (click)="removeLink(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!links.controls?.length" style="text-align: center">
+        <button mat-button (click)="addLink()">
+          <mat-icon>add</mat-icon>
+          <span>Link hozzáadása</span>
+        </button>
+      </div>
+
+      <button mat-button matStepperNext (click)="prepareProject()">
+        Tovább
+      </button>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>
+      Összegzés
+    </ng-template>
+
+    <app-project-card *ngIf="project" [project]="project" [inline]="true" [showDetails]="false" [extended]="true" />
+
+    <div style="text-align: center">
+      <button mat-button matStepperNext (click)="addProject()">
+        Projekt létrehozása
+      </button>
+    </div>
+  </mat-step>
+</mat-stepper>

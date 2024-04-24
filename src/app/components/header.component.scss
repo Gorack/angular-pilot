@@ -1,0 +1,18 @@
+.app-header {
+  width: 100%;
+  background: #d7e3ff;
+  padding: 8px 0;
+  margin-bottom: 42px;
+
+  &__menu {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--mat-text-button-horizontal-padding, 8px);
+  }
+
+  &__menu-item {
+    list-style: none;
+  }
+}

@@ -1,0 +1,21 @@
+.app-project-create {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 0;
+    gap: 12px;
+    flex: 1;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}

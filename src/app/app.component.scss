@@ -1,0 +1,15 @@
+:host {
+  --app-project-list-gap: 8px;
+
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  * {
+    box-sizing: content-box;
+  }
+}
+
+.app-content {
+  margin-bottom: auto;
+}
