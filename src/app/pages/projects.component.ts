@@ -4,9 +4,10 @@ import {ProjectsService} from "../projects.service";
 import {ProjectCardComponent} from "../components/project-card.component";
 import {CommonModule} from "@angular/common";
 import {ProjectListComponent} from "../components/project-list.component";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatInput, MatInputModule} from "@angular/material/input";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {debounceTime, distinctUntilChanged, Observable, Subject, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-projects',
@@ -24,8 +25,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
   styleUrl: './projects.component.scss'
 })
 export class ProjectsComponent implements OnInit {
-  projects: Project[] = []
-  searchControl = new FormControl<string>('')
+  projects$!: Observable<Project[]>
+  private projects: Project[] = []
+  private searchTerms = new Subject<string>()
 
   constructor(
     private projectsService: ProjectsService
@@ -33,11 +35,22 @@ export class ProjectsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchProjects()
-    this.searchControl.valueChanges.subscribe(() => this.searchProjects())
+    this.getProjects()
+
+    this.projects$ = this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term: string) => this.projectsService.searchProjects(this.projects, term)),
+    );
   }
 
-  searchProjects() {
-    this.projectsService.searchProjects(this.searchControl.value).subscribe(projects => this.projects = projects)
+  search(term: string): void {
+    this.searchTerms.next(term);
+  }
+
+  getProjects() {
+    this.projectsService.getProjects().subscribe(projects => {
+      this.projects = projects
+    })
   }
 }

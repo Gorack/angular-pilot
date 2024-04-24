@@ -21,13 +21,11 @@ export class ProjectsService {
     )
   }
 
-  searchProjects(term: string | null) {
+  searchProjects(projects: Project[], term: string | null) {
     if (!term?.trim()) {
-      return this.getProjects()
+      return of(projects)
     }
-    return this.getProjects().pipe(
-      map(projects => projects.filter(project => this.searchInProject(project, term)))
-    )
+    return of(projects.filter(project => this.searchInProject(project, term?.trim().toLowerCase())))
   }
 
   addProject(project: Omit<Project, 'id'>) {
