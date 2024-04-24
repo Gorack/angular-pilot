@@ -7,7 +7,8 @@ import {ProjectListComponent} from "../components/project-list.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {debounceTime, distinctUntilChanged, Observable, Subject, switchMap} from "rxjs";
+import {debounceTime, distinctUntilChanged, Observable, switchMap} from "rxjs";
+import {BehaviorSubject} from "rxjs/internal/BehaviorSubject";
 
 @Component({
   selector: 'app-projects',
@@ -27,7 +28,7 @@ import {debounceTime, distinctUntilChanged, Observable, Subject, switchMap} from
 export class ProjectsComponent implements OnInit {
   projects$!: Observable<Project[]>
   private projects: Project[] = []
-  private searchTerms = new Subject<string>()
+  private searchTerms = new BehaviorSubject<string>('')
 
   constructor(
     private projectsService: ProjectsService
